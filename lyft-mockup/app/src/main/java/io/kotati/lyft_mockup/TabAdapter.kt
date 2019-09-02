@@ -25,6 +25,5 @@ class TabAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 return "My pickups"
             }
         }
-
     }
 }
