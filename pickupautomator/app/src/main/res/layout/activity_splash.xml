@@ -10,6 +10,9 @@
         <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/kotati_logo" />
+                android:src="@drawable/kotati_logo"
+                app:layout_constraintDimensionRatio=""
+                app:srcCompat="@drawable/kotati_logo"
+                android:contentDescription="@null"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
