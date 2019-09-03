@@ -1,5 +1,6 @@
 package io.kotati.pickup_automator
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -52,6 +53,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Automation Service Terminated", Toast.LENGTH_SHORT).show();
             }
 
+        // Start Service
+        Intent()
+        val serviceIntent = Intent(this,  AutomatorService::class.java)
+        if (this != null) {
+            this.startService(serviceIntent)
         }
     }
 }
