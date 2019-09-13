@@ -17,8 +17,6 @@ import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,9 +49,9 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val priceInput = ridePrice.text.toString().trim()
 
-                if(!priceInput.isNotEmpty()) {
-                        startButton.visibility = View.INVISIBLE
-                    } else {
+                if (!priceInput.isNotEmpty()) {
+                    startButton.visibility = View.INVISIBLE
+                } else {
                     startButton.visibility = View.VISIBLE
                 }
             }
