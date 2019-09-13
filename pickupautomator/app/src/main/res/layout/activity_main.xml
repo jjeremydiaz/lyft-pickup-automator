@@ -7,52 +7,44 @@
         android:background="#FFFFFF"
         tools:context=".MainActivity">
 
-
-    <TextView
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="  Ride Price"
-            android:textColor="#25A8E0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-            android:id="@+id/ridePrice"
-            style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:allowUndo="true"
-            android:background="#F5F5F5"
-            android:backgroundTint="#E8E8E8"
-            android:ems="10"
-            android:hint="Input Ride Price"
-            android:inputType="number"
-            android:textColor="#25A8E0"
-            android:textCursorDrawable="@null"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
+    <com.google.android.material.button.MaterialButton
             android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="196dp"
-            android:background="@drawable/btn_rounded"
-            android:text="Start"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="#25A8E0"
+            android:text="Go to Accessibility Settings"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:theme="@style/FormButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ridePrice"
-            app:layout_constraintVertical_bias="0.688" />
+            app:layout_constraintTop_toBottomOf="@+id/toggleOn" />
+
+    <TextView
+            android:id="@+id/toggleOn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="316dp"
+            android:layout_marginEnd="32dp"
+            android:text='Tap on "Go To Accessibility Settings" and toggle pickup-automator to start the automation service.'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/toggleOff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="316dp"
+            android:layout_marginEnd="32dp"
+            android:text='Automation service is currently running. Tap on "Go To Accessibility Settings" and toggle pickup-automator to stop the automation service.'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
