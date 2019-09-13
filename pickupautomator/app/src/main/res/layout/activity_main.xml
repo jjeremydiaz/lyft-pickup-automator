@@ -31,6 +31,7 @@
             android:backgroundTint="#E8E8E8"
             android:ems="10"
             android:hint="Input Ride Price"
+            android:text=""
             android:inputType="number"
             android:textColor="#25A8E0"
             android:textCursorDrawable="@null"

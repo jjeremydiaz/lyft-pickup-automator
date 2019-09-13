@@ -14,8 +14,6 @@ import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         startButton.visibility = View.INVISIBLE
 
-        ridePrice.addTextChangedListener(object: TextWatcher {
+        ridePrice.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -35,9 +33,9 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val priceInput = ridePrice.text.toString().trim()
 
-                if(!priceInput.isNotEmpty()) {
-                        startButton.visibility = View.INVISIBLE
-                    } else {
+                if (!priceInput.isNotEmpty()) {
+                    startButton.visibility = View.INVISIBLE
+                } else {
                     startButton.visibility = View.VISIBLE
                 }
             }
@@ -48,16 +46,14 @@ class MainActivity : AppCompatActivity() {
             if (startButton.text == "Start") {
                 startButton.text = "Stop"
                 Toast.makeText(this, "Automation Service Started", Toast.LENGTH_SHORT).show();
-                } else {
+
+                // Start Service
+                //val serviceIntent = Intent(this, AutomatorService::class.java)
+                //this?.startService(serviceIntent)
+            } else {
                 startButton.text = "Start"
                 Toast.makeText(this, "Automation Service Terminated", Toast.LENGTH_SHORT).show();
             }
-
-        // Start Service
-        Intent()
-        val serviceIntent = Intent(this,  AutomatorService::class.java)
-        if (this != null) {
-            this.startService(serviceIntent)
         }
     }
 }
