@@ -1,15 +1,18 @@
 package io.kotati.pickup_automator
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import android.widget.TextView
 import androidx.core.view.isVisible
+import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
@@ -18,12 +21,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val ridePrice = findViewById<EditText>(R.id.ridePrice)
         val startButton = findViewById<Button>(R.id.startButton)
+        val toggleOn = findViewById<TextView>(R.id.toggleOn)
+        val toggleOff = findViewById<TextView>(R.id.toggleOff)
 
-        startButton.visibility = View.INVISIBLE
+        toggleOff.visibility = View.INVISIBLE
 
-        ridePrice.addTextChangedListener(object : TextWatcher {
+        /*fun isAccessServiceEnabled(context: Context): Boolean {
+            val prefString =
+                Settings.Secure.getString(context.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+            return prefString.contains("${context.packageName}/${context.packageName}.${context.getString(R.string.app_name)}")
+        }
+
+        if(isAccessServiceEnabled(applicationContext)) {
+            toggleOn.visibility = View.INVISIBLE
+            //toggleOff.visibility = View.INVISIBLE
+        }*/
+
+
+        /*ridePrice.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -39,21 +55,18 @@ class MainActivity : AppCompatActivity() {
                     startButton.visibility = View.VISIBLE
                 }
             }
-        })
+        })*/
 
-        //start or terminate automation service
         startButton.setOnClickListener {
-            if (startButton.text == "Start") {
-                startButton.text = "Stop"
-                Toast.makeText(this, "Automation Service Started", Toast.LENGTH_SHORT).show();
+            intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
+        }
 
-                // Start Service
-                //val serviceIntent = Intent(this, AutomatorService::class.java)
-                //this?.startService(serviceIntent)
-            } else {
-                startButton.text = "Start"
-                Toast.makeText(this, "Automation Service Terminated", Toast.LENGTH_SHORT).show();
-            }
+        // Start Service
+        Intent()
+        val serviceIntent = Intent(this,  AutomatorService::class.java)
+        if (this != null) {
+            this.startService(serviceIntent)
         }
     }
 }
