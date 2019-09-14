@@ -2,6 +2,7 @@ package io.kotati.pickup_automator
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
+import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,7 @@ class AutomatorService  : AccessibilityService(){
     var mLayout: FrameLayout? = null
     val mainHandler = Handler(Looper.getMainLooper())
     var bRunning = false
+    var defaultMin = "50"
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
 
@@ -35,6 +37,17 @@ class AutomatorService  : AccessibilityService(){
 
     override fun onInterrupt() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+        if (intent != null) {
+            Log.d("Extra", intent.extras?.getString("data"))
+            defaultMin = intent.extras?.getString("data").toString()
+        } else {
+            Log.d("Extra", "None")
+        }
+        return Service.START_STICKY
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -45,10 +58,11 @@ class AutomatorService  : AccessibilityService(){
         val lp = WindowManager.LayoutParams()
         lp.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         lp.format = PixelFormat.TRANSLUCENT
-        lp.flags = lp.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        lp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.gravity = Gravity.TOP
+        lp.gravity = Gravity.BOTTOM
         val inflater = LayoutInflater.from(this)
         inflater.inflate(R.layout.service_overlay, mLayout)
         wm.addView(mLayout, lp)
@@ -66,15 +80,15 @@ class AutomatorService  : AccessibilityService(){
                 mainHandler.post(object : Runnable {
                     override fun run() {
                         Log.d("delay", "delay")
-
+                        Log.d("defaultMin", defaultMin)
                         // Grab value from edit text
-                        var priceRangeVal = 15
+                        var priceRangeVal = 2
 
                         // Swipe down on lyft-mockup page
                         configureSwipeButton()
 
                         // Parse card
-                        searchCards(rootInActiveWindow, priceRangeVal)
+                        searchCards(rootInActiveWindow, defaultMin.toInt())
 
                         // If value within range click on view Details and confirm
                         mainHandler.postDelayed(this, 5000)
