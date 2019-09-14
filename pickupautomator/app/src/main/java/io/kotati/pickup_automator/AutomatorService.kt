@@ -59,7 +59,8 @@ class AutomatorService  : AccessibilityService(){
         lp.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         lp.format = PixelFormat.TRANSLUCENT
         lp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-
+        //FLAG_NOT_TOUCH_MODAL allows key inputs into the overlay while also allowing focus to be changed to the view behind the overlay
+        //lp.flags = lp.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT
         lp.gravity = Gravity.BOTTOM

@@ -13,9 +13,11 @@
             android:layout_marginStart="80dp"
             android:layout_marginTop="4dp"
             android:theme="@style/FormButton"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-            android:text="test"
-            android:layout_alignParentBottom="true"/>
+            android:backgroundTint="#C90000"
+            app:icon="@drawable/baseline_play_arrow_white_18dp"
+            app:iconGravity="textStart"
+            app:iconSize="@android:dimen/app_icon_size"
+            app:iconTint="#FFFFFF" />
 
     <EditText
             android:id="@+id/editText4"
@@ -39,3 +41,4 @@
             </EditText>
 
 </LinearLayout>
+
