@@ -2,6 +2,7 @@ package io.kotati.pickup_automator
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
+import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,7 @@ class AutomatorService  : AccessibilityService(){
     var mLayout: FrameLayout? = null
     val mainHandler = Handler(Looper.getMainLooper())
     var bRunning = false
+    var defaultMin = "15"
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
 
@@ -35,6 +37,17 @@ class AutomatorService  : AccessibilityService(){
 
     override fun onInterrupt() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+        if (intent != null) {
+            Log.d("Extra", intent.extras?.getString("data").toString())
+            defaultMin = intent.extras?.getString("data").toString()
+        } else {
+            Log.d("Extra", "None")
+        }
+        return Service.START_STICKY
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -46,7 +59,8 @@ class AutomatorService  : AccessibilityService(){
         lp.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
         lp.format = PixelFormat.TRANSLUCENT
         //FLAG_NOT_TOUCH_MODAL allows key inputs into the overlay while also allowing focus to be changed to the view behind the overlay
-        lp.flags = lp.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        //lp.flags = lp.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        lp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT
         lp.gravity = Gravity.BOTTOM
@@ -67,9 +81,10 @@ class AutomatorService  : AccessibilityService(){
                 mainHandler.post(object : Runnable {
                     override fun run() {
                         Log.d("delay", "delay")
+                        Log.d("defaultMin", defaultMin)
 
                         // Grab value from edit text
-                        var priceRangeVal = 15
+                        var priceRangeVal = defaultMin.toInt()
 
                         // Swipe down on lyft-mockup page
                         configureSwipeButton()

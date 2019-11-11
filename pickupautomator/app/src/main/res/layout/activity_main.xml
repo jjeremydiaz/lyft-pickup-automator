@@ -47,7 +47,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-            android:id="@+id/editText"
+            android:id="@+id/ridePrice"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
