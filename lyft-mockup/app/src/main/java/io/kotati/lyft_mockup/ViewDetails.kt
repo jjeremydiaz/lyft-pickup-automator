@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_view_details.*
 import kotlinx.android.synthetic.main.fragment_available_pickups2.*
 
@@ -27,7 +28,20 @@ class ViewDetails : AppCompatActivity() {
         confirm_pickup_button.setOnClickListener {
             Log.d("Pickup confirmed: ", priceRange)
 
-            this.finish()
+            //this.finish()
+            // Simulate error dialog box
+            val alert = AlertDialog.Builder(this)
+            alert.setTitle("")
+            alert.setMessage("This pickup is no longer available")
+            alert.setPositiveButton("OK"){
+                dialog, which ->
+
+                Log.d("Errortest", "Errortest")
+            }
+
+            val dialog: AlertDialog = alert.create()
+
+            dialog.show()
         }
 
 

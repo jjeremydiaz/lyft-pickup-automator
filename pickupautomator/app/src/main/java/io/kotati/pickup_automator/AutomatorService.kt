@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi
 import com.google.android.material.button.MaterialButton
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.activity.OnBackPressedCallback
 
 class AutomatorService  : AccessibilityService(){
     var mLayout: FrameLayout? = null
@@ -151,11 +152,12 @@ class AutomatorService  : AccessibilityService(){
 
                     //Accept the details and return
                     acceptPickup(rootInActiveWindow)
+                    return
                 } else {
                     Log.d("RangeErr", "Target val out of range")
                 }
 
-                return
+                //return
             }
             //if (node.getActionList().contains(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD)) {
             //    return node
@@ -175,9 +177,34 @@ class AutomatorService  : AccessibilityService(){
             var nodeCurrClass = node.className.toString()
             Log.d("acceptPickup", nodeCurrClass)
 
+            // If error dialog box (when ride is already taken)
+            /*
+            if(nodeCurrClass == "android.widget.FrameLayout") {
+                performGlobalAction(GLOBAL_ACTION_BACK)
+                performGlobalAction(GLOBAL_ACTION_BACK)
+
+                return
+            }
+            */
+
             if(nodeCurrClass == "android.widget.Button" && node.text.toString() == "CONFIRM PICKUP") {
                 Log.d("click", node.text.toString())
+
+                // Press the confirm button
                 node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+
+                // Detect if an error dialog box pops up from a ride already being taken
+                Thread.sleep(800)
+                var rideErrorCheck = checkRideError(rootInActiveWindow)
+
+                if(rideErrorCheck) {
+                    // Manually go back (both the back button in app and the OS back button works
+                    performGlobalAction(GLOBAL_ACTION_BACK)
+                    Thread.sleep(800)
+                    performGlobalAction(GLOBAL_ACTION_BACK)
+                } else {
+                    performGlobalAction(GLOBAL_ACTION_BACK)
+                }
                 return
             }
             if(nodeCurrClass == "android.widget.TextView"){
@@ -189,7 +216,25 @@ class AutomatorService  : AccessibilityService(){
             }
         }
     }
+    fun checkRideError(root: AccessibilityNodeInfo): Boolean {
+        val deque = ArrayDeque<AccessibilityNodeInfo>()
+        deque.add(root)
+        while (!deque.isEmpty()) {
+            // Print out node info
+            val node = deque.removeFirst()
+            var nodeCurrClass = node.className.toString()
+            Log.d("rideError", nodeCurrClass)
 
+            if(nodeCurrClass == "android.widget.Button" && node.text.toString() == "OK") {
+                return true
+            }
+
+            for (i in 0 until node.getChildCount()) {
+                deque.addLast(node.getChild(i))
+            }
+        }
+        return false
+    }
     /*
     private fun findScrollableNode(root: AccessibilityNodeInfo): AccessibilityNodeInfo? {
         val deque = ArrayDeque<AccessibilityNodeInfo>()
