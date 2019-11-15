@@ -112,17 +112,50 @@ class AutomatorService  : AccessibilityService(){
         val deque = ArrayDeque<AccessibilityNodeInfo>()
         deque.add(root)
         var priceRangeRes = listOf<String>()
-        var regRange = "\\$([0-9]+)-([0-9]+)".toRegex()
+        var regRange = "\\$([0-9]+) - \\$([0-9]+)".toRegex()
+        var recyclerCount = 0
 
         while (!deque.isEmpty()) {
             // Print out node info
             val node = deque.removeFirst()
             var nodeCurrClass = node.className.toString()
 
-            Log.d("test", node.className.toString())
+            Log.d("className1", node.isClickable.toString() + " " + node.className.toString())
 
-            if(nodeCurrClass == "android.widget.TextView") {
-                Log.d("test", node.text.toString())
+            if(nodeCurrClass == "androidx.recyclerview.widget.RecyclerView" && recyclerCount == 0) {
+                //Log.d("className2", node.isClickable.toString() + " " + node.className.toString() + " " + node.text.toString())
+                //node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                recyclerCount++
+            } else if(nodeCurrClass == "androidx.recyclerview.widget.RecyclerView" && recyclerCount > 0) {
+                recyclerCount = -1
+                Log.d("recycler2", "recycler2 skipped")
+                continue
+            }
+
+            if(nodeCurrClass == "android.widget.TextView" && node.text.toString() == "View details") {
+                Log.d("Inside", node.isClickable().toString())
+                //node.actionList.forEach(Log.d("action", ))
+                Log.d("action1", node.actionList.joinToString(" "))
+                // Check to see if target is greater than range minimum, if so simulate a click
+                var minRange = priceRangeRes.get(1).toInt()
+                if(targetVal <= minRange) {
+                    Log.d("RangeVal", "Target val within range, now automating click")
+                    //node.performAction(AccessibilityNodeInfo.ACTION_FOCUS)
+                    Log.d("ParentNode", node.parent.className.toString() + " " + node.parent.isClickable.toString())
+                    node.parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+
+                    Thread.sleep(500)
+
+                    //Accept the details and return
+                    acceptPickup(rootInActiveWindow)
+                    return
+                } else {
+                    Log.d("RangeErr", "Target val out of range")
+                }
+
+                //return
+            } else if(nodeCurrClass == "android.widget.TextView") {
+                Log.d("seeTextView", node.text.toString())
 
                 // Check to see if price is in price range
                 if(regRange.matches(node.text.toString())) {
@@ -141,23 +174,6 @@ class AutomatorService  : AccessibilityService(){
                 else{
                     Log.d("regex", "Did not match")
                 }
-            } else if(nodeCurrClass == "android.widget.Button" && node.text.toString() == "VIEW DETAILS") {
-                // Check to see if target is greater than range minimum, if so simulate a click
-                var minRange = priceRangeRes.get(1).toInt()
-                if(targetVal <= minRange) {
-                    Log.d("RangeVal", "Target val within range, now automating click")
-                    node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-
-                    Thread.sleep(500)
-
-                    //Accept the details and return
-                    acceptPickup(rootInActiveWindow)
-                    return
-                } else {
-                    Log.d("RangeErr", "Target val out of range")
-                }
-
-                //return
             }
             //if (node.getActionList().contains(AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_FORWARD)) {
             //    return node
@@ -187,11 +203,12 @@ class AutomatorService  : AccessibilityService(){
             }
             */
 
-            if(nodeCurrClass == "android.widget.Button" && node.text.toString() == "CONFIRM PICKUP") {
+            if(nodeCurrClass == "android.widget.TextView" && node.text.toString() == "Confirm pickup") {
                 Log.d("click", node.text.toString())
 
                 // Press the confirm button
-                node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                //node.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                node.parent.performAction(AccessibilityNodeInfo.ACTION_CLICK)
 
                 // Detect if an error dialog box pops up from a ride already being taken
                 Thread.sleep(800)
@@ -205,6 +222,10 @@ class AutomatorService  : AccessibilityService(){
                 } else {
                     performGlobalAction(GLOBAL_ACTION_BACK)
                 }
+
+                Thread.sleep(800)
+                configureSwipeButton()
+
                 return
             }
             if(nodeCurrClass == "android.widget.TextView"){
